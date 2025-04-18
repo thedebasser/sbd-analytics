@@ -1,3 +1,11 @@
+# Database volume
 db_data/
-db_data
+
+# Local env vars
 .env
+
+# Google service‑account key
+secrets/creds.json
+
+# Google Sheet ID secret
+secrets/sheet_id

@@ -12,6 +12,32 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d:ro
+
+  etl:
+    build: ./etl
+    container_name: sbd_etl
+    depends_on:
+      - db
+    environment:
+      # Path to the service‑account JSON inside the container
+      GOOGLE_CREDS: /run/secrets/creds
+      # You can still override via SHEET_ID, or let the script read from the secret file
+      SHEET_ID: "${SHEET_ID:-}"
+      SHEET_ID_FILE: /run/secrets/sheet_id
+      DB_HOST: db
+      DB_NAME: mydatabase
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+    secrets:
+      - creds
+      - sheet_id
+
+secrets:
+  creds:
+    file: ./secrets/creds.json
+  sheet_id:
+    file: ./secrets/sheet_id
 
 volumes:
   db_data:
