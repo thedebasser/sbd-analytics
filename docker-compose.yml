@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15
@@ -29,6 +27,11 @@ services:
       DB_NAME: mydatabase
       DB_USER: myuser
       DB_PASSWORD: mypassword
+      # New: tells the ETL script where to dump its log
+      ETL_LOG_FILE: /app/logs/etl_debug.log
+    volumes:
+      # Mount a host directory for logs
+      - ./logs:/app/logs
     secrets:
       - creds
       - sheet_id
@@ -41,3 +44,4 @@ secrets:
 
 volumes:
   db_data:
+  
